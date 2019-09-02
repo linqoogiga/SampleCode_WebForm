@@ -1,0 +1,30 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" Async="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body bgcolor="#AAAAAA">
+    <form id="form1" runat="server">
+        <div>
+        </div>        
+        <asp:TextBox ID="TextBox1" runat="server" Width="1099px"></asp:TextBox>
+        <br>
+        <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Button1"/>
+        <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Button2" />
+        <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Button3" />
+        <asp:Button ID="Button4" runat="server" OnClick="Button4_Click" Text="Button4" />
+        <asp:Button ID="Btn_SednMail" runat="server" OnClick="Btn_SednMail_Click" Text="寄EMail" />
+        <asp:Button ID="Button5" runat="server" OnClick="Button5_Click" Text="Button5" />
+        <asp:Button ID="Button6" runat="server" OnClick="Button6_Click" Text="Button6" />
+        <asp:Button ID="Button7" runat="server" OnClick="Button7_Click" Text="Button7" />
+        <br><br>      
+        <asp:TextBox ID="TextBox2" runat="server" Height="600px" Width="800px" TextMode="MultiLine"></asp:TextBox>
+        <br><br>        
+        <asp:gridview runat="server" ID="GridView1" AutoGenerateColumns="true"></asp:gridview>
+    </form>
+</body>
+</html>
