@@ -34,13 +34,11 @@
         Master_zaoop[2]        
         Master_zaoop[3]        
         Master_zaoop[3]
-<<<<<<< HEAD
         =====================================
         Branch_ZA
         Branch_ZB
-=======
         HotFix
->>>>>>> hotfix/F01_HotFix
+        hotfix/F01_HotFix
     </form>
 </body>
 </html>
