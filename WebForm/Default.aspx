@@ -32,10 +32,15 @@
         feature/F01-190902-KAiS_WebForm[3]
         develop_[2]       
         Master_zaoop[2]        
+        Master_zaoop[3]        
         Master_zaoop[3]
+<<<<<<< HEAD
         =====================================
         Branch_ZA
         Branch_ZB
+=======
+        HotFix
+>>>>>>> hotfix/F01_HotFix
     </form>
 </body>
 </html>
