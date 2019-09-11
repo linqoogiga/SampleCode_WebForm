@@ -48,6 +48,7 @@
         AMD_QOOGIGA[二]
         AMD_QOOGIGA[三]
         AMD_QOOGIGA[四]        
+        AMD_QOOGIGA[五]
     </form>
 </body>
 </html>
