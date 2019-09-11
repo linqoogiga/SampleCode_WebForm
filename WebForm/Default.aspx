@@ -49,6 +49,9 @@
         AMD_QOOGIGA[三]
         AMD_QOOGIGA[四]        
         AMD_QOOGIGA[五]
+        ===
+        amd_qg_mybranch_[一]
+        amd_qg_mybranch_[二]
     </form>
 </body>
 </html>
