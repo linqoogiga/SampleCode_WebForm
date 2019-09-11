@@ -51,6 +51,7 @@
         AMD_QOOGIGA[五]
         ===
         amd_qg_mybranch_[一]
+        amd_qg_mybranch_[二]
     </form>
 </body>
 </html>
