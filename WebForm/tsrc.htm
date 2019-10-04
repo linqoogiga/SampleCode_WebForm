@@ -1,0 +1,860 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>::AGTS 電子商務系統::</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv='cache-control' content='no-cache'>
+        <meta http-equiv='expires' content='0'>
+        <meta http-equiv='pragma' content='no-cache'>
+        <script type="text/javascript">
+            <!--
+			// AGTS Global definition for JavaScript functions.
+			
+// AGTS Global definition for JavaScript functions.
+
+// AGTS URLs.
+var AGTS_CONTEXT_PATH = '/agts';
+
+// Dialog Title Labels.
+var AGTS_DIALOG_LABEL_TITLE_ALERT = '請注意';
+var AGTS_DIALOG_LABEL_TITLE_CONFIRM = '請確認';
+var AGTS_DIALOG_LABEL_TITLE_INFO = '訊息';
+var AGTS_DIALOG_LABEL_TITLE_WARNING = '警告';
+var AGTS_DIALOG_LABEL_TITLE_ERROR = '錯誤';
+
+//Dialog Button Labels.
+var AGTS_DIALOG_LABEL_BUTTON_YES = '確定';
+var AGTS_DIALOG_LABEL_BUTTON_NO = '取消';
+var AGTS_DIALOG_LABEL_BUTTON_CLEAR = '清除';
+
+// ²£«~Ãþ§O
+var AGTS_PRODUCT_TYPE_THOLIDAY = '1';	// °ªÅK°²´Á
+var AGTS_PRODUCT_TYPE_CUSTOM = '2';		// ¦Û²Õ¦æµ{
+
+// °T®§
+var AGTS_MSG_AJAX_REQUEST_FAILED = '系統發生不可預期的錯誤，請稍後再試。<br>若持續發生，請與系統管理人員聯絡！<br>(Ajax request failed)';
+
+		//-->
+		
+        </script>
+        <link rel="stylesheet" type="text/css" href="/agts/style/setup1.css">
+        <link rel="stylesheet" type="text/css" href="/agts/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="/agts/css/uploadify.css" />
+        <link rel="stylesheet" type="text/css" href="/agts/css/agts-default-theme/jquery-ui-1.9.2.agts.min.css" />
+        <!-- 3-party javascript files. -->
+        <script src="/agts/js/jquery-1.9.1.min.js"></script>
+        <script src="/agts/js/jquery-ui-1.9.2.agts.min.js"></script>
+        <script src="/agts/js/jquery.ui.datepicker-zh-TW.js"></script>
+        <script src="/agts/js/jquery-ui-timepicker-addon.js"></script>
+        <script src="/agts/js/jquery.json-2.3.min.js"></script>
+        <script src="/agts/js/form2object.js"></script>
+        <script src="/agts/js/jquery.uploadify-3.1.min.js"></script>
+        <script src="/agts/js/xdate.dev.js"></script>
+        <!-- ç¶ .js æªå§å®¹æè®åæ, è¥è·¯å¾åæªåä¸è®, å¯æ´æ¹ ver åæ¸çå¼, é¿åçè¦½å¨ç«¯ cache .js æªçåé¡. -->
+        <script src="/agts/script/agts.utils.js?ver=20131206001"></script>
+        <!-- Utilities -->
+        <script src="/agts/script/agts.date.js?ver=20131206001"></script>
+        <!-- Date picker -->
+        <script src="/agts/script/agts.ajax.js?ver=20131206001" ></script>
+        <!-- Ajax functions -->
+        <script src="/agts/script/agts.dialog.js?ver=20131206001"></script>
+        <!-- Dialog boxes -->
+        <script language="JavaScript">
+            <!--
+			//GLOBAL VARIABLE
+			var ajaxLoadingMsg = '<span id="progressMsg" style="display:none;"><img alt="Indicator" src="/agts/img/indicator.gif" /> Loading...</span>';
+			/**
+ * ÀË¬dcheckbox¬O§_³Q¿ï¨ú
+ * @param checkboxName checkboxªºnameÄÝ©Ê­È
+ * @returns {Boolean}
+ */
+function isChecked(checkboxName){
+	var status = false;
+	$('input[name=' + checkboxName + ']').each(function(){
+		if($(this).attr('checked') == 'checked'){
+			status = true;
+			return false;//Â÷¶}eachªº¼gªk
+		}
+	});
+	return status;
+}
+
+/**
+ * ¨ú±ocheckboxªº­È
+ * @param checkboxName checkboxªºnameÄÝ©Ê­È
+ * @returns ¦r¦ê¥Î,¤À¶},¦p1,2,3
+ */
+function getCheckValues(checkboxName){
+	var str = "";
+	$('input[name=' + checkboxName + ']:checked').each(function(){
+		str += $(this).val() + ',';
+	});
+	return str.substring(0, str.lastIndexOf(','));
+}
+
+/**
+ * ³]©wradio­È
+ * @param radioName radioªºnameÄÝ©Ê­È
+ * @param value ³]©w­È
+ */
+function radioVal(radioName,value){
+	$('input[name=' + radioName + ']').each(function(){
+		if($(this).val() == value){
+			$(this).attr('checked',true);
+			return false;
+		}
+		
+	});
+}
+
+function printObject(obj){
+	var tmp = '';
+	$.map(obj, function(val,key){
+		tmp += key + '=' + val + '\n';
+	});
+	alert(tmp);
+}
+
+/**
+ * ±Njson¦r¦êªºÄÝ©Ê­È³]©w¨ìdom¤¸¥ó¬Û¦PnameªºÄæ¦ì­È
+ * ¾A¥Îdom¤¸¥ó:text,radio,checkbox,select,textarea
+ * @param json
+ */
+function mapElementByName(json) {
+	for(var fieldName in json) {
+		//textBox & select
+		var elementName = 'input[name="' + fieldName + '"]';
+
+		//checkBox
+		if ($(elementName).is(":checkbox")) {
+			$(elementName).each(function(){
+				var checkbox = $(this);
+				checkbox.attr("checked",false);
+	            $.each(json[fieldName],function(index,value){
+	                if(checkbox.val() == value){
+	                	checkbox.attr("checked",true);
+	                }
+	            });
+	            
+	        });
+		}
+		//radio
+		if ($(elementName).is(":radio")) {
+			var radioSelector = elementName +'[value="' + json[fieldName] + '"]';
+			$(radioSelector).attr("checked",true);
+			continue;
+		}
+
+		//text & select
+		if ($(elementName).is(":text,:hidden")) {
+			if (json[fieldName] != null) {
+				$(elementName).val(json[fieldName]);
+			} else {
+				$(elementName).val("");
+			}
+		} else {
+			var ddlSelector = 'select[name="' + fieldName + '"]';
+			if (json[fieldName] == null) {
+				$(ddlSelector).val("");
+			} else {
+				$(ddlSelector).val(json[fieldName]);
+			}
+			var textAreaSelector = 'textarea[name="' + fieldName + '"]';
+			if (json[fieldName] == null) {
+				$(textAreaSelector).val("");
+			} else {
+				$(textAreaSelector).val(json[fieldName]);
+			}
+		}
+	}
+}
+
+/**
+ * ±Ndom <input type="file"/> ª@¯Å¨ì¦³¤W¶Ç¥\¯à(¿ï§¹ÀÉ®×§Y¤W¶Ç¨ìserver)
+ * @param uploadId type="file"ªºID
+ * @param saveId ¤W¶Ç¦¨¥\«áÀx¦sÀÉ®×ªºdom id
+ * @param callBack ¤W¶Ç¦¨¥\«á°õ¦æªºfunction
+ * @param fileTypeExt ÀÉ®×Ãþ«¬­­¨î,¦p:*.rtf
+ * @param fileTypeDesc ÀÉ®×Ãþ«¬­­¨î´y­z,¦p:rtfÀÉ®×
+ * @param isFileRename ¤W¶ÇÀÉ®×¬O§_­«·s©R¦W,¹w³]¬°true
+ * @param uploadFolder ¤W¶ÇÀÉ®×Àx¦sªºfolder,¹w³]¥Ñ³]©wÀÉÅª¤J(uploads) 
+ */
+function bindUploadFile(uploadId,saveId,callBack,fileTypeExt,fileTypeDesc,isFileRename,uploadFolder){
+	var param = isFileRename != undefined && isFileRename == true ? 'rename=1' : 'rename=0';
+	if(isFileRename == undefined)
+		param = 'rename=1';
+	param += uploadFolder != undefined ? '&uploadFolder=' + uploadFolder : '&uploadFolder=uploads';
+	$('#' + uploadId).uploadify({
+        'swf'            : '/agts/js/uploadify.swf',
+        'uploader'       : '/agts/upload.view?' + param,
+        'cancelImg'      : '/agts/images/uploadify-cancel.png',
+        //'queueID'        : 'fileQueue',
+        'queueSizeLimit' : 1,
+        'fileTypeDesc'   : fileTypeDesc || 'office文件或pdf文件',  
+        'fileTypeExts'   : fileTypeExt || '*.doc;*.docx;*.xls;*.xlsx;*.ppt;*.rtf;*.csv;*.pdf',
+        'auto'           : true,
+        'multi'          : false,
+        'fileSizeLimit'  : '10MB',
+        'buttonText'     : '選擇上傳檔案',
+        //'removeCompleted':false,
+        //'uploadLimit'    : 1,
+        //'debug'          : true,
+        'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+            dialog_alert('檔案無法上傳' + '(' + file.name + ' err: ' + errorString + ')');
+        },
+        'onUploadSuccess' : function(file, data, response) {
+        	$('#' + saveId).val(data);
+        	if (typeof (callBack) == 'function') {
+				setTimeout(callBack, 50);
+			}
+        	
+        },
+        'onSelectError' : function(file,errorCode,errorMsg) {
+//            printObject(this.queueData);
+            this.queueData.errorMsg = '上傳的檔案格式不允許,檔案格式:' + this.settings.file_types;
+        }
+    });	
+}
+
+//function goNavBack() {
+// 	window.location.href="Javascript:history.go(-1)";
+//}
+			
+  			 
+
+			//-->
+		
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=Utf-8">
+    <style type="text/css">
+div#marquee {
+	position: relative;
+	overflow: hidden; /* 超出範圍的部份要隱藏 */
+	width: 800px;
+	height: 40px;
+	border: 1px solid #ccc;
+}
+
+div#marquee ul,div#marquee li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+div#marquee ul {
+	position: absolute;
+	left: 30px; /* 往後推個 30px */
+}
+
+div#marquee ul li a {
+	display: block;
+	overflow: hidden; /* 超出範圍的部份要隱藏 */
+	font-size: 20px;
+	height: 40px;
+	line-height: 25px;
+	text-decoration: none;
+	font-family:DFKai-sb,Microsoft JhengHei,PMingLiU,Arial,Time New Roman;
+	text-align:left;
+	line-height:40px
+}
+
+div#marquee div.marquee_btn {
+	position: absolute;
+	cursor: pointer;
+}
+
+div#marquee div#marquee_next_btn {
+	left: 5px;
+}
+
+div#marquee div#marquee_prev_btn {
+	right: 5px;
+}
+</style><script language="JavaScript">  
+	function doQuery() {
+	   dom = document.BulletinQueryForm;
+	   dom.action = "/agts/bulletinFront/BulletinQueryListFront.do?more=1";
+	   dom.target="_top";
+	   dom.submit();
+	}
+
+	function doQueryMore() {
+	   dom = document.BulletinQueryForm;
+	   dom.action = "/agts/bulletinFront/BulletinQueryListFront.do?more=1";
+	   dom.target="_top";
+	   dom.submit();
+	}
+
+  	function doView(uuid) {
+	   dom = document.BulletinQueryForm;
+	   dom.action = "/agts/bulletinFront/BulletinViewRecFront.do";
+	   dom.uuid.value = uuid;
+	   dom.target = "_top";
+	   dom.submit();
+	}
+  
+  	function doDownload(file) {
+	  //dom = document.BulletinQueryForm;
+	  //dom.action = "/download.view";
+	  //dom.file.value = file;
+	  //dom.target = "_top";
+	  //dom.submit();
+	}
+//-->
+
+</SCRIPT>
+</head>
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  >
+    <input type="hidden" id="hiddenSelectedMenuTab" value="" />
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <!--  
+    <TD background="/agts/images/top-02-backend.gif" bgcolor="#dc5107" style="background-position:right;background-repeat:no-repeat;">
+  	 -->
+            <TD background="/agts/images/top-02.gif" bgcolor="#dc5107" style="background-position:right;background-repeat:no-repeat;">
+                <IMG src="/agts/images/top-01.gif" />
+            </TD>
+        </tr>
+        <tr>
+            <td>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr valign="top">
+                        <td width="149" height="15" background="/agts/images/left-bg-05.gif">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" background="/agts/images/left-bg-05.gif">
+                                <tr>
+                                    <td>
+                                        <img src="/agts/images/left-01.gif" width="149" height="29">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">新假期訂單管理 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/order/holidayOrderListSP.do" class="chinese1" >
+SP訂單查詢及確認</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderListFront.do" class="chinese1" >
+訂單查詢</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderCreate.do" class="chinese1" >
+訂房及訂位</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderToPayListFront.do" class="chinese1" >
+待付款查詢及付款</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderToIssueTicketListFront.do" class="chinese1" >
+待取票查詢及出票</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderChangeBeforePayFront.do" class="chinese1" >
+付款前變更查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderChangeAfterPayFront.do" class="chinese1" >
+付款後變更查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderCancelFront.do" class="chinese1" >
+付款前退訂查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderRefundFront.do" class="chinese1" >
+付款後退訂查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/holidayOrderRefundTicketFront.do" class="chinese1" >
+取票後退訂查詢及維護</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">訂單管理 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/order/orderListFront.do" class="chinese1" >
+訂單查詢</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderCreate.do" class="chinese1" >
+訂位</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderToPayListFront.do" class="chinese1" >
+待付款查詢及付款</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderToIssueTicketListFront.do" class="chinese1" >
+待取票查詢及出票</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderChangeBeforePayFront.do" class="chinese1" >
+付款前變更查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderChangeAfterPayFront.do" class="chinese1" >
+付款後變更查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderCancelFront.do" class="chinese1" >
+付款前退票查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderRefundFront.do" class="chinese1" >
+付款後退票查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/order/orderRefundTicketFront.do" class="chinese1" >
+取票後退票查詢及維護</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">作業金使用狀況 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/remittance/historyRemittance.do" class="chinese1" >
+作業金報表查詢</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">佣金報表 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/commissionReport/commissionReportQueryListFrontSetup.do" class="chinese1" >
+佣金報表查詢</a>
+                                                    <BR>
+                                                    <a href="/agts/reportSetting/reportInfo.do?REPORT_ENAME=BUSINESS_MEMBER_QUERY2" class="chinese1" >
+新假期企業會員統計報表</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">公布欄訊息 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/bulletinFront/BulletinQueryListSetupFront.do" class="chinese1" >
+公布欄列表</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">可銷售旅遊產品 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/productFront/productQueryListFront.do" class="chinese1" >
+旅遊行程查詢</a>
+                                                    <BR>
+                                                    <a href="/agts/h_product/h_productQueryList.do" class="chinese1" >
+新假期產品查詢</a>
+                                                    <BR>
+                                                    <a href="/agts/h_product/h_productPrice.do" class="chinese1" >
+新假期售價表查詢</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  background="/agts/images/left-bg-04.gif">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="7%">
+                                                    <img src="/agts/images/left-arror-01.gif" width="17" height="20">
+                                                </td>
+                                                <td width="93%">
+                                                    <b>
+                                                        <span class="chinese2">使用者資料維護功能 </span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="7%">&nbsp;</td>
+                                                <td width="93%">
+                                                    <a href="/agts/front/changePasswordFront.do" class="chinese1" >
+個人密碼變更</a>
+                                                    <BR>
+                                                    <a href="/agts/company/remittanceAlertSetupQueryRec.do" class="chinese1" >
+作業金警示金額維護</a>
+                                                    <BR>
+                                                    <a href="/agts/usersFront/usersQueryListFront.do" class="chinese1" >
+使用者名單查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/usersFront/usersCreateFront.do" class="chinese1" >
+使用者名單新增</a>
+                                                    <BR>
+                                                    <a href="/agts/roleFront/listFront.do" class="chinese1" >
+使用者群組查詢及維護</a>
+                                                    <BR>
+                                                    <a href="/agts/roleFront/editFront.do?action=NEW" class="chinese1" >
+使用者群組新增</a>
+                                                    <BR>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td background="/agts/images/left-bg-02.gif">
+                                        <img src="/agts/images/left-02.gif" width="149" height="3">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td height="15">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <table width="100%" class="SysInfo">
+                                            <tr>
+                                                <td>
+                                                    <B>
+                                                        <SPAN class=chinese2>
+                                                            <FONT color=red size=1>
+                                                                <B></B>
+                                                            </FONT>&nbsp;
+                                                        </SPAN>
+                                                    </B>
+                                                </td>
+                                                <td class="MBInfo">
+                                                    <FONT color=#000000  size=2>
+						(
+						
+          				
+                                                        <!-- 前台 -->
+          				            登入公司：燦星旅遊&nbsp;&nbsp;&nbsp;
+                   			登入帳號：blest
+          				
+          				
+          				 )
+                   	
+                                                    </FONT>
+                                                    <A href="javascript:doLogout()">
+                                                        <STRONG>登出</STRONG>
+                                                    </A>
+                                                    <SCRIPT>
+							function doLogout() {
+								
+				        		agtsDialogConfirm('確定登出  ？', toLogout);
+				        		
+							} // doLogout()
+
+							function clean() {
+			 		  		
+								agtsDialogConfirm("確認要清除？",toClean);			 
+							
+							} // clean()
+							
+							function toLogout(){
+								
+								top.location='/agts/logout.do';
+								
+							} // toLogout()
+						</SCRIPT>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td height="35">
+                                        <b>
+                                            <font color="#333333">　</font>
+                                            <span class="chinese2">
+                                                <font color="#CC0000">::公布欄查詢::</font>
+                                            </span>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="97%" height="600"  border="0" cellspacing="0" cellpadding="0" align="center" >
+                                            <tr>
+                                                <td valign="top">
+                                                    <div id="marquee">
+                                                        <div class="marquee_btn" id="marquee_next_btn">
+                                                            <img src="/agts/images/marquee_next_btn.jpg" />
+                                                        </div>
+                                                        <ul>
+			
+		</ul>
+                                                        <div class="marquee_btn" id="marquee_prev_btn">
+                                                            <img src="/agts/images/marquee_prev_btn.jpg" />
+                                                        </div>
+                                                    </div>
+                                                    <form name="BulletinQueryForm" method="post" action="/agts/bulletinFront/BulletinQueryListFront.do">
+                                                        <input type='hidden' name='uuid' value="">
+                                                        <input type='hidden' name='file' value="">
+                                                        <input type='hidden' name='selectedCompany' value="10">
+                                                        <table class=tb4>
+                                                            <tr>
+                                                                <td class="td_l">
+                                                                    <b>關鍵字</b>
+                                                                </td>
+                                                                <td class="td_c">
+                                                                    <input name="title" class="formcss" onFocus="this.style.backgroundColor='#f2e6f2'" onBlur="this.style.backgroundColor='#FFFFFF'" type="text" size="30" maxlength="60" style='background-color: #FFFFFF' value="">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td_l">
+                                                                    <b>發佈時間-開始~結束</b>
+                                                                </td>
+                                                                <td class="td_c">
+                                                                    <input type=text name="publishDateStart" id="publishDateStart" value="" size="10">~
+					
+                                                                    <input type=text name="publishDateEnd" id="publishDateEnd" value="" size="10">
+				
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="td_l_btn">&nbsp;</td>
+                                                                <td class="td_c_btn">
+                                                                    <input type="button" value="查詢" onClick="doQuery()">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <br />
+                                                        <table class=tb4>
+                                                            <tr class="td_ql">
+                                                                <td align="center">
+                                                                    <b>項次</b>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <b>訊息標題</b>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <b>發佈時間</b>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <b>發佈方式</b>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <b>狀態</b>
+                                                                </td>
+                                                                <td align="center">
+                                                                    <b></b>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                    <script type="text/javascript">
+                                                        <!--
+		$(function() {
+			//啟動跑馬燈
+			marquee();
+			bindLimitedCalendar('publishDateStart','publishDateEnd');
+			bindLimitedCalendar('expiredDateStart','expiredDateEnd');
+			//設定radio預設值
+			if($('input[name=deployType]:checked').length == 0){
+				radioVal('deployType',3);
+			}
+			if($('input[name=status]:checked').length == 0){
+				radioVal('status',3);
+			}
+			
+		});
+		
+		
+		function marquee(){
+			// 先取得 div#marquee ul
+			// 接著把 ul 中的 li 項目再重覆加入 ul 中(等於有兩組內容)
+			// 再來取得 div#marquee 的高來決定每次跑馬燈移動的距離
+			// 設定跑馬燈移動的速度及輪播的速度
+			var $marqueeUl = $('div#marquee ul'), $marqueeli = $marqueeUl
+					.append($marqueeUl.html()).children(), _height = $(
+					'div#marquee').height()
+					* -1, scrollSpeed = 600, timer, speed = 3000 + scrollSpeed, direction = 0, // 0 表示往上, 1 表示往下
+			_lock = false;
+
+			// 先把 $marqueeli 移動到第二組
+			$marqueeUl.css('top', $marqueeli.length / 2 * _height);
+
+			// 幫左邊 $marqueeli 加上 hover 事件
+			// 當滑鼠移入時停止計時器；反之則啟動
+			$marqueeli.hover(function() {
+				clearTimeout(timer);
+			}, function() {
+				timer = setTimeout(showad, speed);
+			});
+
+			// 判斷要往上還是往下
+			$('div#marquee .marquee_btn').click(function() {
+				if (_lock)
+					return;
+				clearTimeout(timer);
+				direction = $(this).attr('id') == 'marquee_next_btn' ? 0 : 1;
+				showad();
+			});
+
+			// 控制跑馬燈上下移動的處理函式
+			function showad() {
+				_lock = !_lock;
+				var _now = $marqueeUl.position().top / _height;
+				_now = (direction ? _now - 1 + $marqueeli.length : _now + 1)
+						% $marqueeli.length;
+
+				// $marqueeUl 移動
+				$marqueeUl.animate({
+					top : _now * _height
+				}, scrollSpeed, function() {
+					// 如果已經移動到第二組時...則馬上把 top 設回到第一組的最後一筆
+					// 藉此產生不間斷的輪播
+					if (_now == $marqueeli.length - 1) {
+						$marqueeUl.css('top', $marqueeli.length / 2 * _height
+								- _height);
+					} else if (_now == 0) {
+						$marqueeUl.css('top', $marqueeli.length / 2 * _height);
+					}
+					_lock = !_lock;
+				});
+
+				// 再啟動計時器
+				timer = setTimeout(showad, speed);
+			}
+
+			// 啟動計時器
+			timer = setTimeout(showad, speed);
+
+			$('a').focus(function() {
+				this.blur();
+			});
+
+		}
+		
+		
+	//-->
+	
+                                                    </script>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="Footer">台灣高速鐵路股份有限公司　版權所有
+                    <br/>©  2013 Taiwan High Speed Rail Corporation. All Rights Reserved.
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -144,6 +144,7 @@ WebForm/Bin/Microsoft.Office.Interop.Excel.dll
 WebForm/Bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 WebForm/Bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll.refresh
 WebForm/Bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+WebForm/ajax.htm
 WebForm/Bin/roslyn/vbc.rsp
 WebForm/Bin/roslyn/vbc.exe.refresh
 WebForm/Bin/roslyn/vbc.exe.config
