@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+var txtarea_val=$('txtarea').val();
+
+var sJson = JSON.stringify
+(
+{
+ "FirstCategory":"旅遊咨詢",
+ "SecondCategory":"國外旅遊",
+ "MemberName":"林阿男",
+ "Phone":"0921137848",
+ "EMail":"john4944@startravel.com.tw",
+ "Content":" + txtarea_val + ",
+ "OrderNo":"PO55665566",
+ "Server":"" 
+}
+);
+
+console.log(sJson);
+
+  $("button").click(function(){
+    $.ajax({
+    async: false,   
+    dataType: "json",    
+    url:"http://localhost:49594/api/SendContactUsKAISMail" , 
+    contentType: 'application/json; charset=UTF-8',
+    data: sJson,
+    success: function(result){
+    $("#div1").html(result);
+    }});
+  });
+});
+</script>
+</head>
+<body>
+
+<div id="div1"><h2>Let jQuery AJAX Change This Text</h2></div>
+<textarea id='txtarea'>
+</textarea>
+<button>Get External Content</button>
+
+</body>
+</html>
