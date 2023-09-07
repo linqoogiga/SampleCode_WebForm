@@ -55,6 +55,8 @@
         ===
         amd_qg_mybranch_[一]
         amd_qg_mybranch_[二]
+        ===
+        AMD_QOOGIGA[六]_20230907[Thu]
     </form>
 </body>
 </html>
