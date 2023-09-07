@@ -35,14 +35,29 @@
         Master_zaoop[2]        
         Master_zaoop[3]        
         Master_zaoop[3]
-        Master_zaoop[4]        
-        develop_[3]
+        =====================================
+        Branch_ZA
+        =======
+        HotFix
         =====================================
         Branch_ZA
         Branch_ZB
         HotFix
         hotfix/F01_HotFix
         哈哈
+        Edit@github.com==>develop[4]@github.com。
+        origin/develop
+        =====================================
+        AMD_QOOGIGA@StarTravel_JohnPC
+        AMD_QOOGIGA[二]
+        AMD_QOOGIGA[三]
+        AMD_QOOGIGA[四]        
+        AMD_QOOGIGA[五]
+        ===
+        amd_qg_mybranch_[一]
+        amd_qg_mybranch_[二]
+        ===
+        I am Master。
     </form>
 </body>
 </html>
