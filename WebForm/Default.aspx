@@ -48,7 +48,6 @@
         Edit@github.com==>develop[4]@github.com。
         origin/develop
         =====================================
-        AMD_QOOGIGA@StarTravel_JohnPC
         AMD_QOOGIGA[二]
         AMD_QOOGIGA[三]
         AMD_QOOGIGA[四]        
