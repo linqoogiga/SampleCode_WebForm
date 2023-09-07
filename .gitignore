@@ -187,3 +187,4 @@ WebForm/Bin/roslyn/Microsoft.CodeAnalysis.dll
 WebForm/Bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll.refresh
 WebForm/Bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll
 *.vsidx
+.vs/WebForm/v17/.suo
