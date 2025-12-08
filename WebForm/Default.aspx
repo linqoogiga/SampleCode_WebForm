@@ -60,8 +60,12 @@
         I am Master。
         =====================================        
         加入Master_ZB。
-        加入Master_ZC。
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        加入Master_ZC。       
+        =====================================
+        HR
+        HR_Ver2
+        =====================================
+        HR_Ver3
     </form>
 </body>
 </html>
