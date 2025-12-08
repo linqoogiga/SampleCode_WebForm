@@ -185,5 +185,8 @@ WebForm/Bin/roslyn/Microsoft.CodeAnalysis.dll.refresh
 WebForm/Bin/roslyn/Microsoft.CodeAnalysis.dll
 WebForm/Bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll.refresh
 WebForm/Bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll
+<<<<<<< HEAD
 .vs/WebForm/FileContentIndex/22a744c0-ce22-4548-be92-93cd31b28ee5.vsidx
+=======
+>>>>>>> 9ef8dd2 (忽略Ignore*.vidx)
 *.vsidx
