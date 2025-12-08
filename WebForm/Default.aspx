@@ -58,6 +58,8 @@
         amd_qg_mybranch_[二]
         ===
         I am Master。
+        =====================================
+        HR
     </form>
 </body>
 </html>
