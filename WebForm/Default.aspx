@@ -48,7 +48,6 @@
         Edit@github.com==>develop[4]@github.com。
         origin/develop
         =====================================
-        AMD_QOOGIGA@StarTravel_JohnPC
         AMD_QOOGIGA[二]
         AMD_QOOGIGA[三]
         AMD_QOOGIGA[四]        
@@ -58,6 +57,7 @@
         amd_qg_mybranch_[二]
         ===
         I am Master。
+<<<<<<< HEAD
         =====================================        
         加入Master_ZB。
         加入Master_ZC。       
@@ -66,6 +66,10 @@
         HR_Ver2
         =====================================
         HR_Ver3
+=======
+        ===
+        I am ZA
+>>>>>>> ZA
     </form>
 </body>
 </html>
